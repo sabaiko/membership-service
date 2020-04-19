@@ -1,15 +1,15 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
-      golang: 1.13
+        nodejs: 10
   build:
     commands:
-      - echo Building the Go code...
-      - go build hello.go
+      - npm install time
+      - export BUCKET=lambda-deployment-artifacts-123456789012
+      - aws cloudformation package --template-file template.yml --s3-bucket $BUCKET --output-template-file outputtemplate.yml
 artifacts:
-  secondary-artifacts:
-    golang_artifacts:
-      files:
-        - hello
+  type: zip
+  files:
+    - template.yml
+    - outputtemplate.yml
